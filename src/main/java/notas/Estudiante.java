@@ -9,10 +9,14 @@ public class Estudiante {
 		this.nombre=nombre;
 		this.nota=0;
 	}
-	public Estudiante(String dni, String nombre, double nota) {
+	public Estudiante(String dni, String nombre, double nota) throws EstudianteException {
 		this.dni=dni;
 		this.nombre=nombre;
-		this.nota=nota;
+		if(nota<0) {
+			throw new EstudianteException("Calificacion negativa");
+		}else {
+			this.nota=nota;
+		}
 	}
 	public String getNombre() {
 		return this.nombre;
