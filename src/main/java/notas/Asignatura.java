@@ -9,25 +9,73 @@ public class Asignatura {
 	private String nombre;
 	private List<Estudiante> estudiantes;
 	private List<String> errores;
-	public Asignatura(String nombre, String[] alumnos) throws EstudianteException {
+	public Asignatura(String nombre, String[] alumnos){
 		this.nombre=nombre;
 		estudiantes=new ArrayList<>();
 		for(int i=0;i<alumnos.length;i++) {
-			Scanner nuevoAlumnos=new Scanner(alumnos[i].toString());
-			nuevoAlumnos.useLocale(Locale.ENGLISH);
-			nuevoAlumnos.useDelimiter(";");
-			try {
+			try(Scanner nuevoAlumnos=new Scanner(alumnos[i].toString())) {
+				nuevoAlumnos.useLocale(Locale.ENGLISH);
+				nuevoAlumnos.useDelimiter("\\s*[;]\\s*");
 				String dni=nuevoAlumnos.next();
 				String nombreApellidos=nuevoAlumnos.next();
 				double nota=Double.parseDouble(nuevoAlumnos.next());
-				estudiantes.add(new Estudiante(dni,nombre,nota));
+				estudiantes.add(new Estudiante(dni,nombreApellidos,nota));
 			}catch(EstudianteException e) {
-				errores.add("Error. "+e.getMessage()+": "+alumnos[i].toString());
+				errores.add("Error. "+e.getMessage()+": "+alumnos[i]);
 			}catch(NumberFormatException ne) {
-				errores.add("Error. Nota no numerica: "+alumnos[i].toString());
+				errores.add("Error. Nota no numerica: "+alumnos[i]);
 			}catch(NoSuchElementException nse) {
-				errores.add("Error. Faltan datos: "+alumnos[i].toString());
+				errores.add("Error. Faltan datos: "+alumnos[i]);
 			}
 		}
+	}
+	public double getCalificacion(Estudiante est) throws EstudianteException{
+		try {
+			return this.estudiantes.get(this.buscarEstudiante(est)).getCalificacion();
+		}catch(ArrayIndexOutOfBoundsException ae) {
+			throw new EstudianteException(est.toString());
+		}
+	}
+	public double getMedia() throws EstudianteException{
+		if(this.estudiantes.isEmpty()) {
+			throw new EstudianteException("No hay estudiantes");
+		}else {
+			double sumatorio=0;
+			for(int i=0;i<this.estudiantes.size();i++) {
+				sumatorio=sumatorio+this.estudiantes.get(i).getCalificacion();
+			}
+			return sumatorio/this.estudiantes.size();
+		}
+	}
+	public String getNombre() {
+		return this.nombre;
+	}
+	public List<Estudiante> getEstudiantes(){
+		return this.estudiantes;
+	}
+	public List<String> getErrores(){
+		return this.errores;
+	}
+	public String toString() {
+		StringBuilder sb=new StringBuilder();
+		sb.append(this.nombre);
+		sb.append(": { ");
+		sb.append(this.getEstudiantes().toArray());
+		sb.append(", ");
+		sb.append(this.getErrores().toArray());
+		sb.append("}");
+		return sb.toString();
+	}
+	private int buscarEstudiante(Estudiante est) {
+		boolean encontrado=false;
+		int posicion=0;
+		while(!encontrado && posicion<this.estudiantes.size()) {
+			if(estudiantes.get(posicion).equals(est)) {
+				encontrado=true;
+			}
+			posicion++;
+		}
+		posicion= (encontrado)? posicion-1:-1;
+		return posicion;
 	}
 }

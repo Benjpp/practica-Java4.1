@@ -1,6 +1,6 @@
 package notas;
 
-public class EstudianteException extends Exception{
+public class EstudianteException extends RuntimeException{
 	public EstudianteException() {
 		super();
 	}

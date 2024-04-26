@@ -27,7 +27,7 @@ public class Estudiante {
 	public double getCalificacion() {
 		return this.nota;
 	}
-	public boolean equals(Estudiante o) {
+	public boolean equals(Estudiante o){
 		return this.nombre.equals(o.getNombre()) && this.dni.equalsIgnoreCase(o.getNombre());
 	}
 	public int hashCode() {
