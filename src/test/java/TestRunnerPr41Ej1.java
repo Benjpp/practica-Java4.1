@@ -401,7 +401,7 @@ public class TestRunnerPr41Ej1 {
 		}
 		@Test
 		@Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
-		public void pruebaSubjectMainTest1() {
+		public void pruebaSubjectMainTest1() throws EstudianteException {
 			String salida = "";
 			SysOutCapture sysOutCapture = new SysOutCapture();
 			try {

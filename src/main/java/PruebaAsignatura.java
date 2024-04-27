@@ -13,5 +13,6 @@ public class PruebaAsignatura {
 		for(Estudiante e: PA1.getEstudiantes()) {
 			Dnis.add(e.getDni());
 		}
+		System.out.println("Dnis: "+Dnis.toString());
 	}
 }
