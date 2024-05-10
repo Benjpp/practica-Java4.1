@@ -7,15 +7,15 @@ import java.util.Scanner;
 
 public class Asignatura {
 	private String nombre;
-	private List<Estudiante> estudiantes;
-	private List<String> errores;
+	private List<Estudiante> estudiantes=new ArrayList<>();
+	private List<String> errores=new ArrayList<>();
 	public Asignatura(String nombre, String[] alumnos){
 		this.nombre=nombre;
 		estudiantes=new ArrayList<>();
 		for(int i=0;i<alumnos.length;i++) {
 			try(Scanner nuevoAlumnos=new Scanner(alumnos[i].toString())) {
 				nuevoAlumnos.useLocale(Locale.ENGLISH);
-				nuevoAlumnos.useDelimiter("\\s*[;]\\s*");
+				nuevoAlumnos.useDelimiter("[;]");
 				String dni=nuevoAlumnos.next();
 				String nombreApellidos=nuevoAlumnos.next();
 				double nota=Double.parseDouble(nuevoAlumnos.next());
@@ -30,10 +30,11 @@ public class Asignatura {
 		}
 	}
 	public double getCalificacion(Estudiante est) throws EstudianteException{
-		try {
-			return this.estudiantes.get(this.buscarEstudiante(est)).getCalificacion();
-		}catch(ArrayIndexOutOfBoundsException ae) {
-			throw new EstudianteException(est.toString());
+		int posicionDeEst=this.buscarEstudiante(est);
+		if(posicionDeEst==-1) {
+			throw new EstudianteException(est.toString()+" no se encuentra");
+		}else {
+			return this.estudiantes.get(posicionDeEst).getCalificacion();
 		}
 	}
 	public double getMedia() throws EstudianteException{
@@ -75,7 +76,6 @@ public class Asignatura {
 			}
 			posicion++;
 		}
-		posicion= (encontrado)? posicion-1:-1;
-		return posicion;
+		return posicion= (encontrado)? posicion-1:-1;
 	}
 }
